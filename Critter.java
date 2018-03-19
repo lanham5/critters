@@ -51,6 +51,7 @@ public abstract class Critter {
 
     private int x_coord;
     private int y_coord;
+    private boolean alive;
 
     protected final void walk(int direction) {
         switch (direction) {
@@ -144,6 +145,7 @@ public abstract class Critter {
             c.y_coord = getRandomInt(Params.world_height);
             CritterWorld.critterGrid[c.x_coord][c.y_coord] = c.toString();
             c.energy = Params.start_energy;
+            population.add(c);
 
         } 
         catch (ClassNotFoundException exception) {
@@ -246,6 +248,15 @@ public abstract class Critter {
         protected static List<Critter> getBabies() {
             return babies;
         }
+        
+        protected void setAlive(boolean alive) {
+            super.alive = alive;
+        }
+
+        protected boolean getAlive() {
+            return super.alive;
+        }
+        
     }
 
     /**
@@ -266,9 +277,19 @@ public abstract class Critter {
         for (Critter c : CritterWorld.list) {
             for (Critter d : CritterWorld.list) {
                 if (!c.equals(d)) {
-                    if ((c.x_coord == d.x_coord) && (c.y_coord == d.y_coord)) {
+                    if (sameCoords(c,d)) {
                         c.fight(d.toString());
                         d.fight(c.toString());
+                        if (sameCoords(c,d) && c.alive && d.alive) {
+                            if (getRandomInt(c.energy) >= getRandomInt(d.energy)) {
+                                c.energy = c.energy + (d.energy / 2);
+                                population.remove(d);
+                            }
+                            else {
+                                d.energy = d.energy + (c.energy / 2);
+                                population.remove(c);
+                            }                            
+                        }
                     }
                 }
                 else {
@@ -283,4 +304,64 @@ public abstract class Critter {
     public static void displayWorld() {
         // Complete this method.
     }
+    
+    public static boolean sameCoords(Critter a, Critter b) {
+        if ((a.x_coord == b.x_coord) && (a.y_coord == b.y_coord)) {
+            return true;
+        } else {
+            return false;
+        }               
+    }
+
+    
+    
+    protected void setEnergy(int new_energy_value) {
+        energy = new_energy_value;
+    }
+
+    protected void setX_coord(int new_x_coord) {
+        x_coord = new_x_coord;
+    }
+
+    protected void setY_coord(int new_y_coord) {
+        y_coord = new_y_coord;
+    }
+
+    protected int getX_coord() {
+        return x_coord;
+    }
+
+    protected int getY_coord() {
+        return y_coord;
+    }
+
+
+    /*
+     * This method getPopulation has to be modified by you if you are not using the population
+     * ArrayList that has been provided in the starter code.  In any case, it has to be
+     * implemented for grading tests to work.
+     */
+    protected static List<Critter> getPopulation() {
+        return population;
+    }
+
+    /*
+     * This method getBabies has to be modified by you if you are not using the babies
+     * ArrayList that has been provided in the starter code.  In any case, it has to be
+     * implemented for grading tests to work.  Babies should be added to the general population 
+     * at either the beginning OR the end of every timestep.
+     */
+    protected static List<Critter> getBabies() {
+        return babies;
+    }
+
+    protected void setAlive(boolean alive) {
+        this.alive = alive;
+    }
+
+    protected boolean getAlive() {
+        return alive;
+    }
+    
+    
 }

@@ -15,6 +15,7 @@ public class Rat extends Critter {
 
     public boolean fight(String enemy) { 
         if (enemy.equals("C") || enemy.equals("S")) {
+            doTimeStep();
             return false;
         } else {
             return true;
@@ -24,5 +25,9 @@ public class Rat extends Critter {
     @Override
     public void doTimeStep() {
         int direction = Critter.getRandomInt(7);
+        run(direction);
+        if (getEnergy() <= 0) {
+            
+        }
     }
 }
