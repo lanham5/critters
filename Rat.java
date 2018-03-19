@@ -14,8 +14,12 @@ public class Rat extends Critter {
     public String toString() { return "R"; }
 
     public boolean fight(String enemy) { 
+        int direction = Critter.getRandomInt(7);
+        
         if (enemy.equals("C") || enemy.equals("S")) {
-            doTimeStep();
+            if (getHasMoved() == false) {
+                
+            }
             return false;
         } else {
             return true;
@@ -24,10 +28,10 @@ public class Rat extends Critter {
 
     @Override
     public void doTimeStep() {
-        int direction = Critter.getRandomInt(7);
-        run(direction);
-        if (getEnergy() <= 0) {
-            
-        }
+        CritterWorld.occupied[getX_coord()][getY_coord()] = false;
+        walk(Critter.getRandomInt(7));
+        CritterWorld.occupied[getX_coord()][getY_coord()] = true;
+        
+        setHasMoved(true);
     }
 }

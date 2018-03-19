@@ -10,9 +10,8 @@ package assignment4;
  * @author Michael
  */
 public class CritterWorld {
-    public static java.util.ArrayList<Critter> list;
+    public static boolean[][] occupied = new boolean[Params.world_width][Params.world_height];
     public static int numCritters;
-    public static String[][] critterGrid;
-    
+    public static String[][] critterGrid = new String[Params.world_width][Params.world_height];  
     
 }

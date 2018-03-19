@@ -28,7 +28,10 @@ public class Fly extends Critter {
 
 	@Override
 	public void doTimeStep() {
-            int direction = Critter.getRandomInt(7);
+            if (Critter.getRandomInt(10) >= 5) {   
+                walk(Critter.getRandomInt(7));
+                setHasMoved(true);
+            }   
 	}
 
 }

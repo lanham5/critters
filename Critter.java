@@ -52,8 +52,11 @@ public abstract class Critter {
     private int x_coord;
     private int y_coord;
     private boolean alive;
+    private boolean hasMoved;
 
     protected final void walk(int direction) {
+        energy = energy - Params.walk_energy_cost;
+        
         switch (direction) {
             case 0:
                 x_coord = x_coord + 1;
@@ -88,6 +91,8 @@ public abstract class Critter {
     }
 
     protected final void run(int direction) {
+        energy = energy - Params.run_energy_cost;
+        
         switch (direction) {
             case 0:
                 x_coord = x_coord + 2;
@@ -143,7 +148,8 @@ public abstract class Critter {
 
             c.x_coord = getRandomInt(Params.world_width);
             c.y_coord = getRandomInt(Params.world_height);
-            CritterWorld.critterGrid[c.x_coord][c.y_coord] = c.toString();
+            CritterWorld.occupied[c.x_coord][c.y_coord] = true;
+            //CritterWorld.critterGrid[c.x_coord][c.y_coord] = c.toString();
             c.energy = Params.start_energy;
             population.add(c);
 
@@ -264,18 +270,21 @@ public abstract class Critter {
      */
     public static void clearWorld() {
         // Complete this method.
-        CritterWorld.list.clear();
+        population.clear();
     }
 
     public static void worldTimeStep() {
         // Complete this method.
-        for (Critter c : CritterWorld.list) {
+        for (Critter c : population) {
             c.doTimeStep();
+            if (c.energy <= 0) {
+                population.remove(c);
+            }          
         }
 
         //critters list will be updated as fights occur
-        for (Critter c : CritterWorld.list) {
-            for (Critter d : CritterWorld.list) {
+        for (Critter c : population) {
+            for (Critter d : population) {
                 if (!c.equals(d)) {
                     if (sameCoords(c,d)) {
                         c.fight(d.toString());
@@ -291,9 +300,8 @@ public abstract class Critter {
                             }                            
                         }
                     }
-                }
-                else {
-
+                } else {
+                    //when c and d are the same item, do nothing
                 }  
             }
         }
@@ -361,6 +369,14 @@ public abstract class Critter {
 
     protected boolean getAlive() {
         return alive;
+    }
+    
+    protected void setHasMoved(boolean hasMoved) {
+        this.hasMoved = hasMoved;
+    }
+
+    protected boolean getHasMoved() {
+        return hasMoved;
     }
     
     
