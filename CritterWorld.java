@@ -12,6 +12,7 @@ package assignment4;
 public class CritterWorld {
     public static java.util.ArrayList<Critter> list;
     public static int numCritters;
+    public static String[][] critterGrid;
     
     
 }

@@ -5,7 +5,6 @@
  */
 package assignment4;
 
-import java.util.Random;
 
 /**
  *
@@ -20,8 +19,7 @@ public class Cat extends Critter {
 
     @Override
     public void doTimeStep() {
-        Random r = new java.util.Random();
-        int direction = r.nextInt(7);
+        int direction = Critter.getRandomInt(7);
     }
     
 }

@@ -9,6 +9,26 @@ package assignment4;
  *
  * @author Michael
  */
-public class Fly {
-    
+public class Fly extends Critter {
+	
+	@Override
+	public String toString() { return "*"; }
+		
+	public Fly() {
+            
+	}
+	
+	public boolean fight(String enemy) { 
+            if (enemy.equals("@")) {
+                return true; 
+            } else {
+                return false; 
+            }
+        }
+
+	@Override
+	public void doTimeStep() {
+            int direction = Critter.getRandomInt(7);
+	}
+
 }

@@ -12,6 +12,6 @@ public class Algae extends TestCritter {
 	public boolean fight(String not_used) { return false; }
 	
 	public void doTimeStep() {
-		setEnergy(getEnergy() + Params.photosynthesis_energy_amount);
+            setEnergy(getEnergy() + Params.photosynthesis_energy_amount);
 	}
 }

@@ -17,5 +17,6 @@ public class Snake extends Critter{
 
     @Override
     public void doTimeStep() {
+        int direction = Critter.getRandomInt(7);
     }
 }

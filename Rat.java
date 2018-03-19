@@ -13,9 +13,16 @@ public class Rat extends Critter {
     @Override
     public String toString() { return "R"; }
 
-    public boolean fight(String not_used) { return true; }
+    public boolean fight(String enemy) { 
+        if (enemy.equals("C") || enemy.equals("S")) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
     @Override
     public void doTimeStep() {
+        int direction = Critter.getRandomInt(7);
     }
 }
