@@ -14,6 +14,8 @@ package assignment4;
 
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /* see the PDF for descriptions of the methods and fields in this class
  * you may add fields, methods or inner classes to Critter ONLY if you make your additions private
@@ -28,16 +30,16 @@ public abstract class Critter {
 
 	// Gets the package name.  This assumes that Critter and its subclasses are all in the same package.
 	static {
-		myPackage = Critter.class.getPackage().toString().split(" ")[1];
+            myPackage = Critter.class.getPackage().toString().split(" ")[1];
 	}
 	
 	private static java.util.Random rand = new java.util.Random();
 	public static int getRandomInt(int max) {
-		return rand.nextInt(max);
+            return rand.nextInt(max);
 	}
 	
 	public static void setSeed(long new_seed) {
-		rand = new java.util.Random(new_seed);
+            rand = new java.util.Random(new_seed);
 	}
 	
 	
@@ -74,7 +76,28 @@ public abstract class Critter {
 	 * @throws InvalidCritterException
 	 */
 	public static void makeCritter(String critter_class_name) throws InvalidCritterException {
-	}
+            try {
+                Class<?> cl = Class.forName(critter_class_name);
+                Critter c = (Critter) cl.newInstance();
+                
+                c.x_coord = 4;
+                c.y_coord = 2;
+                c.energy = Params.start_energy;
+                
+            } 
+            catch (ClassNotFoundException exception) {
+                throw new InvalidCritterException(critter_class_name);
+            } catch (InstantiationException ex) {
+                Logger.getLogger(Critter.class.getName()).log(Level.SEVERE, null, ex);
+                throw new InvalidCritterException(critter_class_name);
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(Critter.class.getName()).log(Level.SEVERE, null, ex);
+                throw new InvalidCritterException(critter_class_name);
+            }
+            
+                
+            
+        }
 	
 	/**
 	 * Gets a list of critters of a specific type.
@@ -83,9 +106,9 @@ public abstract class Critter {
 	 * @throws InvalidCritterException
 	 */
 	public static List<Critter> getInstances(String critter_class_name) throws InvalidCritterException {
-		List<Critter> result = new java.util.ArrayList<Critter>();
+            List<Critter> result = new java.util.ArrayList<Critter>();
 	
-		return result;
+            return result;
 	}
 	
 	/**
@@ -93,23 +116,23 @@ public abstract class Critter {
 	 * @param critters List of Critters.
 	 */
 	public static void runStats(List<Critter> critters) {
-		System.out.print("" + critters.size() + " critters as follows -- ");
-		java.util.Map<String, Integer> critter_count = new java.util.HashMap<String, Integer>();
-		for (Critter crit : critters) {
-			String crit_string = crit.toString();
-			Integer old_count = critter_count.get(crit_string);
-			if (old_count == null) {
-				critter_count.put(crit_string,  1);
-			} else {
-				critter_count.put(crit_string, old_count.intValue() + 1);
-			}
-		}
-		String prefix = "";
-		for (String s : critter_count.keySet()) {
-			System.out.print(prefix + s + ":" + critter_count.get(s));
-			prefix = ", ";
-		}
-		System.out.println();		
+            System.out.print("" + critters.size() + " critters as follows -- ");
+            java.util.Map<String, Integer> critter_count = new java.util.HashMap<String, Integer>();
+            for (Critter crit : critters) {
+                String crit_string = crit.toString();
+                Integer old_count = critter_count.get(crit_string);
+                if (old_count == null) {
+                    critter_count.put(crit_string,  1);
+                } else {
+                    critter_count.put(crit_string, old_count.intValue() + 1);
+                }
+            }
+            String prefix = "";
+            for (String s : critter_count.keySet()) {
+                System.out.print(prefix + s + ":" + critter_count.get(s));
+                prefix = ", ";
+            }
+            System.out.println();		
 	}
 	
 	/* the TestCritter class allows some critters to "cheat". If you want to 
@@ -123,59 +146,77 @@ public abstract class Critter {
 	 * so that they correctly update your grid/data structure.
 	 */
 	static abstract class TestCritter extends Critter {
-		protected void setEnergy(int new_energy_value) {
-			super.energy = new_energy_value;
-		}
-		
-		protected void setX_coord(int new_x_coord) {
-			super.x_coord = new_x_coord;
-		}
-		
-		protected void setY_coord(int new_y_coord) {
-			super.y_coord = new_y_coord;
-		}
-		
-		protected int getX_coord() {
-			return super.x_coord;
-		}
-		
-		protected int getY_coord() {
-			return super.y_coord;
-		}
+            protected void setEnergy(int new_energy_value) {
+                super.energy = new_energy_value;
+            }
+
+            protected void setX_coord(int new_x_coord) {
+                super.x_coord = new_x_coord;
+            }
+
+            protected void setY_coord(int new_y_coord) {
+                super.y_coord = new_y_coord;
+            }
+
+            protected int getX_coord() {
+                return super.x_coord;
+            }
+
+            protected int getY_coord() {
+                return super.y_coord;
+            }
 		
 
-		/*
-		 * This method getPopulation has to be modified by you if you are not using the population
-		 * ArrayList that has been provided in the starter code.  In any case, it has to be
-		 * implemented for grading tests to work.
-		 */
-		protected static List<Critter> getPopulation() {
-			return population;
-		}
-		
-		/*
-		 * This method getBabies has to be modified by you if you are not using the babies
-		 * ArrayList that has been provided in the starter code.  In any case, it has to be
-		 * implemented for grading tests to work.  Babies should be added to the general population 
-		 * at either the beginning OR the end of every timestep.
-		 */
-		protected static List<Critter> getBabies() {
-			return babies;
-		}
+            /*
+             * This method getPopulation has to be modified by you if you are not using the population
+             * ArrayList that has been provided in the starter code.  In any case, it has to be
+             * implemented for grading tests to work.
+             */
+            protected static List<Critter> getPopulation() {
+                return population;
+            }
+
+            /*
+             * This method getBabies has to be modified by you if you are not using the babies
+             * ArrayList that has been provided in the starter code.  In any case, it has to be
+             * implemented for grading tests to work.  Babies should be added to the general population 
+             * at either the beginning OR the end of every timestep.
+             */
+            protected static List<Critter> getBabies() {
+                return babies;
+            }
 	}
 
 	/**
 	 * Clear the world of all critters, dead and alive
 	 */
 	public static void clearWorld() {
-		// Complete this method.
+            // Complete this method.
+            CritterWorld.list.clear();
 	}
 	
 	public static void worldTimeStep() {
-		// Complete this method.
+            // Complete this method.
+            for (Critter c : CritterWorld.list) {
+                c.doTimeStep();
+            }
+            
+            //critters list will be updated as fights occur
+            for (Critter c : CritterWorld.list) {
+                for (Critter d : CritterWorld.list) {
+                    if (!c.equals(d)) {
+                        c.fight(d.toString());
+                    }
+                    else {
+                        
+                    }  
+                }
+            }
+            
+            
 	}
 	
 	public static void displayWorld() {
-		// Complete this method.
+            // Complete this method.
 	}
 }
