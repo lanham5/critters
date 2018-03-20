@@ -41,7 +41,7 @@ public class Main {
      * @param args args can be empty.  If not empty, provide two parameters -- the first is a file name, 
      * and the second is test (for test output, where all output to be directed to a String), or nothing.
      */
-    public static void main(String[] args) { 
+    public static void main(String[] args) throws InvalidCritterException { 
         if (args.length != 0) {
             try {
                 inputFile = args[0];
@@ -66,7 +66,42 @@ public class Main {
         } else { // if no arguments to main
             kb = new Scanner(System.in); // use keyboard and console
         }
-
+        
+        kb.useDelimiter("\n");
+        String input = kb.next();
+        input = input.toLowerCase();
+        while(!input.equals("quit")){
+            if(input.equals("show")){
+                Critter.displayWorld();
+            }
+            else if(input.contains("step")){
+                int count = Integer.valueOf(input.split(" ")[1]);
+                for(int i = 0; i < count; i++){
+                    Critter.worldTimeStep();
+                }
+            }
+            else if(input.contains("seed")){
+                int seed = Integer.valueOf(input.split(" ")[1]);
+                Critter.setSeed(seed);
+            }
+            else if(input.contains("make")){
+                String name = input.split(" ")[1];
+                int count = Integer.valueOf(input.split(" ")[2]);
+                for(int i = 0; i < count; i++){
+                    Critter.makeCritter(name);
+                }
+            }
+            else if(input.contains("stats")){
+                String name = input.split(" ")[1];
+                Critter.getInstances(name);
+                Critter.runStats(Critter.getInstances(name));
+            }else{
+                System.out.println("Invalid input");
+            }
+            
+            input = kb.next();
+            input = input.toLowerCase();
+        }
         /* Do not alter the code above for your submission. */
         /* Write your code below. */
         

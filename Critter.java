@@ -384,7 +384,25 @@ public abstract class Critter {
     }
 
     public static void displayWorld() {
-        // Complete this method.
+        String cap = "+";
+        for(int i = 0; i < Params.world_width; i++){
+            cap += "-";
+        }
+        cap += "+";
+        System.out.println(cap);
+
+        for(int i = 0; i < Params.world_height; i++){
+            System.out.print("|");
+            for(int j = 0; j < Params.world_width; j++){
+                String temp = CritterWorld.critterGrid[i][j];
+                if(temp.equals("")){
+                    temp += " ";
+                }
+                System.out.print(temp);
+            }
+            System.out.println("|");
+        }
+        System.out.println(cap);
     }
     
     public static boolean sameCoords(Critter a, Critter b) {
