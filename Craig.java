@@ -1,5 +1,8 @@
 package assignment4;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 /*
  * Example critter
@@ -40,7 +43,12 @@ public class Craig extends Critter {
 			child.genes[g] -= 1;
 			g = Critter.getRandomInt(8);
 			child.genes[g] += 1;
-			reproduce(child, Critter.getRandomInt(8));
+                    try {
+                        reproduce(child, Critter.getRandomInt(8));
+                    } catch (InstantiationException | IllegalAccessException ex) {
+                        Logger.getLogger(Craig.class.getName()).log(Level.SEVERE, null, ex);
+                    } 
+                    
 		}
 		
 		/* pick a new direction based on our genes */

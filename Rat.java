@@ -15,22 +15,35 @@ public class Rat extends Critter {
 
     public boolean fight(String enemy) { 
         int direction = Critter.getRandomInt(7);
-        
-        if (enemy.equals("C") || enemy.equals("S")) {
-            if (getHasMoved() == false) {
-                
+
+            
+        if (getHasMoved() == false) {
+            if (enemy.equals("C") || enemy.equals("S")) {
+                CritterWorld.occupied[getX_coord()][getY_coord()]--;
+                run(direction);
+
+                if (CritterWorld.occupied[getX_coord()][getY_coord()] > 0) {
+                    undoRun(direction);
+                    CritterWorld.occupied[getX_coord()][getY_coord()]++;
+                    return true;
+                } else {
+                    CritterWorld.occupied[getX_coord()][getY_coord()]++; //new coordinates
+                }
+                return false;  
+            } else {
+                return true;
             }
-            return false;
         } else {
             return true;
         }
+        
     }
 
     @Override
     public void doTimeStep() {
-        CritterWorld.occupied[getX_coord()][getY_coord()] = false;
+        CritterWorld.occupied[getX_coord()][getY_coord()]--;
         walk(Critter.getRandomInt(7));
-        CritterWorld.occupied[getX_coord()][getY_coord()] = true;
+        CritterWorld.occupied[getX_coord()][getY_coord()]++;
         
         setHasMoved(true);
     }

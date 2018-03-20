@@ -51,7 +51,6 @@ public abstract class Critter {
 
     private int x_coord;
     private int y_coord;
-    private boolean alive;
     private boolean hasMoved;
 
     protected final void walk(int direction) {
@@ -125,7 +124,94 @@ public abstract class Critter {
         }
     }
 
-    protected final void reproduce(Critter offspring, int direction) {
+    protected final void undoWalk(int direction) {
+        
+        switch (direction) {
+            case 0:
+                x_coord = x_coord - 1;
+                break;
+            case 1:
+                x_coord = x_coord - 1;
+                y_coord = y_coord + 1;
+                break;
+            case 2:
+                y_coord = y_coord + 1;
+                break;
+            case 3:
+                x_coord = x_coord + 1;
+                y_coord = y_coord + 1;
+                break;
+            case 4:
+                x_coord = x_coord + 1;
+                break;
+            case 5:
+                x_coord = x_coord + 1;
+                y_coord = y_coord - 1;
+                break;
+            case 6:
+                y_coord = y_coord + 1;
+                break;
+            case 7:
+                x_coord = x_coord - 1;
+                y_coord = y_coord - 1;
+                break;
+        }
+
+    }
+
+    protected final void undoRun(int direction) {
+        
+        switch (direction) {
+            case 0:
+                x_coord = x_coord - 2;
+                break;
+            case 1:
+                x_coord = x_coord - 2;
+                y_coord = y_coord + 2;
+                break;
+            case 2:
+                y_coord = y_coord + 2;
+                break;
+            case 3:
+                x_coord = x_coord + 2;
+                y_coord = y_coord + 2;
+                break;
+            case 4:
+                x_coord = x_coord + 2;
+                break;
+            case 5:
+                x_coord = x_coord + 2;
+                y_coord = y_coord - 2;
+                break;
+            case 6:
+                y_coord = y_coord + 2;
+                break;
+            case 7:
+                x_coord = x_coord - 2;
+                y_coord = y_coord - 2;
+                break;
+        }
+    }
+
+    protected final void alive(){
+        if(energy <= 0){
+            CritterWorld.occupied[x_coord][y_coord]--;
+            population.remove(this);
+        }
+    } 
+
+    protected final void reproduce(Critter offspring, int direction) throws InstantiationException, IllegalAccessException {
+
+            offspring = (Critter) this.getClass().newInstance();
+            
+            offspring.x_coord = getRandomInt(this.getX_coord() + getRandomInt(2) - 1);
+            offspring.y_coord = getRandomInt(this.getY_coord() + getRandomInt(2) - 1);
+            CritterWorld.occupied[offspring.x_coord][offspring.y_coord]++;
+            CritterWorld.critterGrid[offspring.x_coord][offspring.y_coord] = offspring.toString();
+            offspring.energy = Math.floorDiv(this.energy, 2);
+            this.energy = this.energy - offspring.energy;
+            babies.add(offspring);
+        
     }
 
     public abstract void doTimeStep();
@@ -143,29 +229,21 @@ public abstract class Critter {
      */
     public static void makeCritter(String critter_class_name) throws InvalidCritterException {
         try {
-            Class<?> cl = Class.forName(critter_class_name);
+            Class cl = Class.forName(critter_class_name);
             Critter c = (Critter) cl.newInstance();
 
             c.x_coord = getRandomInt(Params.world_width);
             c.y_coord = getRandomInt(Params.world_height);
-            CritterWorld.occupied[c.x_coord][c.y_coord] = true;
+            CritterWorld.occupied[c.x_coord][c.y_coord]++;
             //CritterWorld.critterGrid[c.x_coord][c.y_coord] = c.toString();
             c.energy = Params.start_energy;
             population.add(c);
 
         } 
-        catch (ClassNotFoundException exception) {
+        catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
             throw new InvalidCritterException(critter_class_name);
-        } catch (InstantiationException ex) {
-            Logger.getLogger(Critter.class.getName()).log(Level.SEVERE, null, ex);
-            throw new InvalidCritterException(critter_class_name);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(Critter.class.getName()).log(Level.SEVERE, null, ex);
-            throw new InvalidCritterException(critter_class_name);
-        }
-
-
-
+        } 
+        
     }
 
     /**
@@ -255,13 +333,6 @@ public abstract class Critter {
             return babies;
         }
         
-        protected void setAlive(boolean alive) {
-            super.alive = alive;
-        }
-
-        protected boolean getAlive() {
-            return super.alive;
-        }
         
     }
 
@@ -289,23 +360,26 @@ public abstract class Critter {
                     if (sameCoords(c,d)) {
                         c.fight(d.toString());
                         d.fight(c.toString());
-                        if (sameCoords(c,d) && c.alive && d.alive) {
+                        c.alive();
+                        d.alive();
+                        if (population.contains(c) && population.contains(d) && sameCoords(c,d)) {
                             if (getRandomInt(c.energy) >= getRandomInt(d.energy)) {
                                 c.energy = c.energy + (d.energy / 2);
+                                CritterWorld.occupied[d.getX_coord()][d.getY_coord()]--;
                                 population.remove(d);
-                            }
-                            else {
+                            } else {
                                 d.energy = d.energy + (c.energy / 2);
+                                CritterWorld.occupied[c.getX_coord()][c.getY_coord()]--;
                                 population.remove(c);
                             }                            
                         }
                     }
-                } else {
-                    //when c and d are the same item, do nothing
-                }  
+                }
+                
             }
         }
-
+        population.addAll(babies);
+        babies.clear();
 
     }
 
@@ -361,14 +435,6 @@ public abstract class Critter {
      */
     protected static List<Critter> getBabies() {
         return babies;
-    }
-
-    protected void setAlive(boolean alive) {
-        this.alive = alive;
-    }
-
-    protected boolean getAlive() {
-        return alive;
     }
     
     protected void setHasMoved(boolean hasMoved) {

@@ -19,19 +19,38 @@ public class Fly extends Critter {
 	}
 	
 	public boolean fight(String enemy) { 
-            if (enemy.equals("@")) {
-                return true; 
+            int direction = Critter.getRandomInt(7);
+            
+            if (getHasMoved() == false) {
+                if (enemy.equals("@")) {
+                    return true; 
+                } else {
+                    CritterWorld.occupied[getX_coord()][getY_coord()]--;
+                    walk(direction);
+                    
+                    if (CritterWorld.occupied[getX_coord()][getY_coord()] > 0) {
+                        undoWalk(direction);
+                        CritterWorld.occupied[getX_coord()][getY_coord()]++;
+                        return true;
+                    } else {
+                        CritterWorld.occupied[getX_coord()][getY_coord()]++; //new coordinates
+                                                
+                    }
+                    return false; 
+                }
             } else {
-                return false; 
+                return true;
             }
         }
 
 	@Override
 	public void doTimeStep() {
+            
             if (Critter.getRandomInt(9) >= 5) {   
                 walk(Critter.getRandomInt(7));
                 setHasMoved(true);
-            }   
+            }
+            
 	}
 
 }
