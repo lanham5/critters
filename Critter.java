@@ -13,6 +13,8 @@ package assignment4;
  */
 
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,8 +27,9 @@ import java.util.logging.Logger;
 
 public abstract class Critter {
     private static String myPackage;
-    private	static List<Critter> population = new java.util.ArrayList<Critter>();
+    private static List<Critter> population = new java.util.ArrayList<Critter>();
     private static List<Critter> babies = new java.util.ArrayList<Critter>();
+    private static List<Critter> dead = new java.util.ArrayList<Critter>();
 
     // Gets the package name.  This assumes that Critter and its subclasses are all in the same package.
     static {
@@ -51,153 +54,132 @@ public abstract class Critter {
 
     private int x_coord;
     private int y_coord;
+    private int prev_x_coord;
+    private int prev_y_coord;
     private boolean hasMoved;
 
     protected final void walk(int direction) {
+        System.out.println("direction: " + direction);
         energy = energy - Params.walk_energy_cost;
+        prev_x_coord = x_coord;
+        prev_y_coord = y_coord;
         
-        switch (direction) {
-            case 0:
-                x_coord = x_coord + 1;
-                break;
-            case 1:
-                x_coord = x_coord + 1;
-                y_coord = y_coord - 1;
-                break;
-            case 2:
-                y_coord = y_coord - 1;
-                break;
-            case 3:
-                x_coord = x_coord - 1;
-                y_coord = y_coord - 1;
-                break;
-            case 4:
-                x_coord = x_coord - 1;
-                break;
-            case 5:
-                x_coord = x_coord - 1;
-                y_coord = y_coord + 1;
-                break;
-            case 6:
-                y_coord = y_coord - 1;
-                break;
-            case 7:
-                x_coord = x_coord + 1;
-                y_coord = y_coord + 1;
-                break;
-        }
+        if(alive()){
+            CritterWorld.occupied[y_coord][x_coord]--;
+            if(CritterWorld.occupied[y_coord][x_coord] == 0){
+                CritterWorld.critterGrid[y_coord][x_coord] = "";
+            }
+            
+            switch (direction) {
+                case 0:
+                    x_coord = (x_coord + 1) % Params.world_width;
+                    break;
+                case 1:
+                    x_coord = (x_coord + 1) % Params.world_width;
+                    y_coord = (y_coord == 0) ? Params.world_height-1: y_coord-1;          
+                    break;
+                case 2:
+                    y_coord = (y_coord == 0) ? Params.world_height-1: y_coord-1; 
+                    break;
+                case 3:
+                    x_coord = (x_coord == 0) ? Params.world_width-1: x_coord-1;
+                    y_coord = (y_coord == 0) ? Params.world_height-1: y_coord-1; 
+                    break;
+                case 4:
+                    x_coord = (x_coord == 0) ? Params.world_width-1: x_coord-1; 
+                    break;
+                case 5:
+                    x_coord = (x_coord == 0) ? Params.world_width-1: x_coord-1;
+                    y_coord = (y_coord + 1) % Params.world_height;
+                    break;
+                case 6:
+                    y_coord = (y_coord + 1) % Params.world_height;
+                    break;
+                case 7:
+                    x_coord = (x_coord + 1) % Params.world_width;
+                    y_coord = (y_coord + 1) % Params.world_height;
+                    break;
+            }
 
+            CritterWorld.occupied[y_coord][x_coord]++;
+            CritterWorld.critterGrid[y_coord][x_coord] = this.toString();
+            
+            System.out.println(this.toString() + " just walked, new coords: " + x_coord + "," + y_coord + ". New Energy: " + energy);
+        }
     }
 
     protected final void run(int direction) {
         energy = energy - Params.run_energy_cost;
+        prev_x_coord = x_coord;
+        prev_y_coord = y_coord;
         
-        switch (direction) {
-            case 0:
-                x_coord = x_coord + 2;
-                break;
-            case 1:
-                x_coord = x_coord + 2;
-                y_coord = y_coord - 2;
-                break;
-            case 2:
-                y_coord = y_coord - 2;
-                break;
-            case 3:
-                x_coord = x_coord - 2;
-                y_coord = y_coord - 2;
-                break;
-            case 4:
-                x_coord = x_coord - 2;
-                break;
-            case 5:
-                x_coord = x_coord - 2;
-                y_coord = y_coord + 2;
-                break;
-            case 6:
-                y_coord = y_coord - 2;
-                break;
-            case 7:
-                x_coord = x_coord + 2;
-                y_coord = y_coord + 2;
-                break;
+        if(alive()){
+            
+            CritterWorld.occupied[y_coord][x_coord]--;
+            if(CritterWorld.occupied[y_coord][x_coord] == 0){
+                CritterWorld.critterGrid[y_coord][x_coord] = "";
+            }
+            
+                
+            switch (direction) {
+                case 0:
+                    x_coord = (x_coord + 2) % Params.world_width;
+                    break;
+                case 1:
+                    x_coord = (x_coord + 2) % Params.world_width;
+                    y_coord = (y_coord == 0) ? Params.world_height-2: y_coord-2;          
+                    break;
+                case 2:
+                    y_coord = (y_coord == 0) ? Params.world_height-2: y_coord-2; 
+                    break;
+                case 3:
+                    x_coord = (x_coord == 0) ? Params.world_width-2: x_coord-2;
+                    y_coord = (y_coord == 0) ? Params.world_height-2: y_coord-2; 
+                    break;
+                case 4:
+                    x_coord = (x_coord == 0) ? Params.world_width-2: x_coord-2; 
+                    break;
+                case 5:
+                    x_coord = (x_coord == 0) ? Params.world_width-2: x_coord-2;
+                    y_coord = (y_coord + 2) % Params.world_height;
+                    break;
+                case 6:
+                    y_coord = (y_coord + 2) % Params.world_height;
+                    break;
+                case 7:
+                    x_coord = (x_coord + 2) % Params.world_width;
+                    y_coord = (y_coord + 2) % Params.world_height;
+                    break;
+            }
+
+            CritterWorld.occupied[y_coord][x_coord]++;
+            CritterWorld.critterGrid[y_coord][x_coord] = this.toString();
+            
+            System.out.println(this.toString() + " just ran, new coords: " + x_coord + "," + y_coord + ". New Energy: " + energy);
         }
     }
-
-    protected final void undoWalk(int direction) {
-        
-        switch (direction) {
-            case 0:
-                x_coord = x_coord - 1;
-                break;
-            case 1:
-                x_coord = x_coord - 1;
-                y_coord = y_coord + 1;
-                break;
-            case 2:
-                y_coord = y_coord + 1;
-                break;
-            case 3:
-                x_coord = x_coord + 1;
-                y_coord = y_coord + 1;
-                break;
-            case 4:
-                x_coord = x_coord + 1;
-                break;
-            case 5:
-                x_coord = x_coord + 1;
-                y_coord = y_coord - 1;
-                break;
-            case 6:
-                y_coord = y_coord + 1;
-                break;
-            case 7:
-                x_coord = x_coord - 1;
-                y_coord = y_coord - 1;
-                break;
-        }
+    
+    protected final void undoWalk() {      
+            x_coord = prev_x_coord;
+            y_coord = prev_y_coord;
 
     }
 
     protected final void undoRun(int direction) {
-        
-        switch (direction) {
-            case 0:
-                x_coord = x_coord - 2;
-                break;
-            case 1:
-                x_coord = x_coord - 2;
-                y_coord = y_coord + 2;
-                break;
-            case 2:
-                y_coord = y_coord + 2;
-                break;
-            case 3:
-                x_coord = x_coord + 2;
-                y_coord = y_coord + 2;
-                break;
-            case 4:
-                x_coord = x_coord + 2;
-                break;
-            case 5:
-                x_coord = x_coord + 2;
-                y_coord = y_coord - 2;
-                break;
-            case 6:
-                y_coord = y_coord + 2;
-                break;
-            case 7:
-                x_coord = x_coord - 2;
-                y_coord = y_coord - 2;
-                break;
-        }
+        x_coord = prev_x_coord;
+        y_coord = prev_y_coord;
     }
 
-    protected final void alive(){
+    protected final boolean alive(){        
         if(energy <= 0){
-            CritterWorld.occupied[x_coord][y_coord]--;
-            population.remove(this);
-        }
+            CritterWorld.occupied[y_coord][x_coord]--;
+            if(CritterWorld.occupied[y_coord][x_coord] == 0){
+                CritterWorld.critterGrid[y_coord][x_coord] = "";
+            }
+            dead.add(this);
+            return false;
+        }     
+        return true;
     } 
 
     protected final void reproduce(Critter offspring, int direction) throws InstantiationException, IllegalAccessException {
@@ -234,7 +216,8 @@ public abstract class Critter {
 
             c.x_coord = getRandomInt(Params.world_width);
             c.y_coord = getRandomInt(Params.world_height);
-            CritterWorld.occupied[c.x_coord][c.y_coord]++;
+            CritterWorld.occupied[c.y_coord][c.x_coord]++;
+            CritterWorld.critterGrid[c.y_coord][c.x_coord] = c.toString();
             //CritterWorld.critterGrid[c.x_coord][c.y_coord] = c.toString();
             c.energy = Params.start_energy;
             population.add(c);
@@ -253,9 +236,24 @@ public abstract class Critter {
      * @throws InvalidCritterException
      */
     public static List<Critter> getInstances(String critter_class_name) throws InvalidCritterException {
-        List<Critter> result = new java.util.ArrayList<>();
+        List<Critter> critters = new ArrayList<>();
+        
+        try {
+            Class cl = Class.forName(critter_class_name);
+            Critter c_temp = (Critter) cl.newInstance();
 
-        return result;
+            for(Critter i : population){
+                if(i.toString().equals(c_temp.toString())){
+                    critters.add(i);
+                }
+            }
+
+        } 
+        catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+            throw new InvalidCritterException(critter_class_name);
+        } 
+        
+        return critters;
     }
 
     /**
@@ -282,7 +280,7 @@ public abstract class Critter {
         System.out.println();		
     }
 
-    /* the TestCritter class allows some critters to "cheat". If you want to 
+    /** the TestCritter class allows some critters to "cheat". If you want to 
      * create tests of your Critter model, you can create subclasses of this class
      * and then use the setter functions contained here. 
      * 
@@ -291,7 +289,7 @@ public abstract class Critter {
      * using some sort of external grid or some other data structure in addition
      * to the x_coord and y_coord functions, then you MUST update these setter functions
      * so that they correctly update your grid/data structure.
-     */
+     **/
     static abstract class TestCritter extends Critter {
         protected void setEnergy(int new_energy_value) {
             super.energy = new_energy_value;
@@ -348,9 +346,6 @@ public abstract class Critter {
         // Complete this method.
         for (Critter c : population) {
             c.doTimeStep();
-            if (c.energy <= 0) {
-                population.remove(c);
-            }          
         }
 
         //critters list will be updated as fights occur
@@ -362,15 +357,15 @@ public abstract class Critter {
                         d.fight(c.toString());
                         c.alive();
                         d.alive();
-                        if (population.contains(c) && population.contains(d) && sameCoords(c,d)) {
+                        if (!dead.contains(c) && !dead.contains(d) && sameCoords(c,d)) {
                             if (getRandomInt(c.energy) >= getRandomInt(d.energy)) {
                                 c.energy = c.energy + (d.energy / 2);
-                                CritterWorld.occupied[d.getX_coord()][d.getY_coord()]--;
-                                population.remove(d);
+                                CritterWorld.occupied[d.getY_coord()][d.getX_coord()]--;
+                                dead.add(d);
                             } else {
                                 d.energy = d.energy + (c.energy / 2);
-                                CritterWorld.occupied[c.getX_coord()][c.getY_coord()]--;
-                                population.remove(c);
+                                CritterWorld.occupied[c.getY_coord()][c.getX_coord()]--;
+                                dead.add(c);
                             }                            
                         }
                     }
@@ -379,26 +374,28 @@ public abstract class Critter {
             }
         }
         population.addAll(babies);
+        population.removeAll(dead);
         babies.clear();
+        dead.clear();
 
     }
 
     public static void displayWorld() {
-        String cap = "+";
+        String cap = "+ ";
         for(int i = 0; i < Params.world_width; i++){
-            cap += "-";
+            cap += "- ";
         }
         cap += "+";
         System.out.println(cap);
 
         for(int i = 0; i < Params.world_height; i++){
-            System.out.print("|");
+            System.out.print("| ");
             for(int j = 0; j < Params.world_width; j++){
                 String temp = CritterWorld.critterGrid[i][j];
                 if(temp.equals("")){
                     temp += " ";
                 }
-                System.out.print(temp);
+                System.out.print(temp + " ");
             }
             System.out.println("|");
         }
@@ -411,54 +408,45 @@ public abstract class Critter {
         } else {
             return false;
         }               
-    }
+    }   
 
-    
-    
-    protected void setEnergy(int new_energy_value) {
-        energy = new_energy_value;
-    }
-
-    protected void setX_coord(int new_x_coord) {
-        x_coord = new_x_coord;
-    }
-
-    protected void setY_coord(int new_y_coord) {
-        y_coord = new_y_coord;
-    }
-
-    protected int getX_coord() {
-        return x_coord;
-    }
-
-    protected int getY_coord() {
-        return y_coord;
-    }
-
-
-    /*
+    /**
      * This method getPopulation has to be modified by you if you are not using the population
      * ArrayList that has been provided in the starter code.  In any case, it has to be
      * implemented for grading tests to work.
-     */
+     **/
     protected static List<Critter> getPopulation() {
         return population;
     }
 
-    /*
+    /**
      * This method getBabies has to be modified by you if you are not using the babies
      * ArrayList that has been provided in the starter code.  In any case, it has to be
      * implemented for grading tests to work.  Babies should be added to the general population 
      * at either the beginning OR the end of every timestep.
-     */
+     **/
     protected static List<Critter> getBabies() {
         return babies;
     }
     
+    protected void setEnergy(int new_energy_value) {
+        energy = new_energy_value;
+    }
+    protected void setX_coord(int new_x_coord) {
+        x_coord = new_x_coord;
+    }
+    protected void setY_coord(int new_y_coord) {
+        y_coord = new_y_coord;
+    }
+    protected int getX_coord() {
+        return x_coord;
+    }
+    protected int getY_coord() {
+        return y_coord;
+    }
     protected void setHasMoved(boolean hasMoved) {
         this.hasMoved = hasMoved;
     }
-
     protected boolean getHasMoved() {
         return hasMoved;
     }

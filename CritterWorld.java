@@ -5,13 +5,25 @@
  */
 package assignment4;
 
+import java.util.Arrays;
+
 /**
  *
  * @author Michael
  */
 public class CritterWorld {
-    public static int[][] occupied = new int[Params.world_width][Params.world_height];
+    public static int[][] occupied = new int[Params.world_height][Params.world_width];
     public static int numCritters;
-    public static String[][] critterGrid = new String[Params.world_width][Params.world_height];  
+    public static String[][] critterGrid = new String[Params.world_height][Params.world_width];  
     
+    public static void initialize(){
+        numCritters = 0;
+        
+        for (String[] row : critterGrid) {
+            Arrays.fill(row, "");
+        }
+        for (int[] row : occupied) {
+            Arrays.fill(row, 0);
+        }
+    }
 }

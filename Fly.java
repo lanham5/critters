@@ -25,17 +25,12 @@ public class Fly extends Critter {
                 if (enemy.equals("@")) {
                     return true; 
                 } else {
-                    CritterWorld.occupied[getX_coord()][getY_coord()]--;
                     walk(direction);
                     
-                    if (CritterWorld.occupied[getX_coord()][getY_coord()] > 0) {
-                        undoWalk(direction);
-                        CritterWorld.occupied[getX_coord()][getY_coord()]++;
+                    if (CritterWorld.occupied[getX_coord()][getY_coord()] > 1) {
+                        undoWalk();
                         return true;
-                    } else {
-                        CritterWorld.occupied[getX_coord()][getY_coord()]++; //new coordinates
-                                                
-                    }
+                    }                                         
                     return false; 
                 }
             } else {
@@ -46,7 +41,7 @@ public class Fly extends Critter {
 	@Override
 	public void doTimeStep() {
             
-            if (Critter.getRandomInt(9) >= 5) {   
+            if (Critter.getRandomInt(9) >= 0) {   
                 walk(Critter.getRandomInt(7));
                 setHasMoved(true);
             }

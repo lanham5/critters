@@ -66,16 +66,22 @@ public class Main {
         } else { // if no arguments to main
             kb = new Scanner(System.in); // use keyboard and console
         }
-        
+            
+        /* Do not alter the code above for your submission. */
+        /* Write your code below. */
+        CritterWorld.initialize();       
         kb.useDelimiter("\n");
         String input = kb.next();
-        input = input.toLowerCase();
+        
         while(!input.equals("quit")){
             if(input.equals("show")){
                 Critter.displayWorld();
             }
             else if(input.contains("step")){
-                int count = Integer.valueOf(input.split(" ")[1]);
+                int count = 1;
+                if(input.split(" ").length > 1){
+                    count = Integer.valueOf(input.split(" ")[1]);
+                }             
                 for(int i = 0; i < count; i++){
                     Critter.worldTimeStep();
                 }
@@ -85,14 +91,17 @@ public class Main {
                 Critter.setSeed(seed);
             }
             else if(input.contains("make")){
-                String name = input.split(" ")[1];
-                int count = Integer.valueOf(input.split(" ")[2]);
+                String name = "assignment4." + input.split(" ")[1];
+                int count = 1;
+                if(input.split(" ").length > 2){
+                    count = Integer.valueOf(input.split(" ")[2]);
+                }
                 for(int i = 0; i < count; i++){
                     Critter.makeCritter(name);
                 }
             }
             else if(input.contains("stats")){
-                String name = input.split(" ")[1];
+                String name = "assignment4." + input.split(" ")[1];
                 Critter.getInstances(name);
                 Critter.runStats(Critter.getInstances(name));
             }else{
@@ -100,13 +109,8 @@ public class Main {
             }
             
             input = kb.next();
-            input = input.toLowerCase();
         }
-        /* Do not alter the code above for your submission. */
-        /* Write your code below. */
-        
-        // System.out.println("GLHF");
-        
+
         /* Write your code above */
         System.out.flush();
 
