@@ -50,7 +50,9 @@ public abstract class Critter {
     public String toString() { return ""; }
 
     private int energy = 0;
-    protected int getEnergy() { return energy; }
+    protected int getEnergy() { 
+        return energy; 
+    }
 
     private int x_coord;
     private int y_coord;
@@ -59,7 +61,6 @@ public abstract class Critter {
     private boolean hasMoved;
 
     protected final void walk(int direction) {
-        System.out.println("direction: " + direction);
         energy = energy - Params.walk_energy_cost;
         prev_x_coord = x_coord;
         prev_y_coord = y_coord;
@@ -104,7 +105,7 @@ public abstract class Critter {
             CritterWorld.occupied[y_coord][x_coord]++;
             CritterWorld.critterGrid[y_coord][x_coord] = this.toString();
             
-            System.out.println(this.toString() + " just walked, new coords: " + x_coord + "," + y_coord + ". New Energy: " + energy);
+ //           System.out.println(this.toString() + " just walked, new coords: " + x_coord + "," + y_coord + ". New Energy: " + energy);
         }
     }
 
@@ -114,33 +115,31 @@ public abstract class Critter {
         prev_y_coord = y_coord;
         
         if(alive()){
-            
             CritterWorld.occupied[y_coord][x_coord]--;
             if(CritterWorld.occupied[y_coord][x_coord] == 0){
                 CritterWorld.critterGrid[y_coord][x_coord] = "";
             }
             
-                
             switch (direction) {
                 case 0:
                     x_coord = (x_coord + 2) % Params.world_width;
                     break;
                 case 1:
                     x_coord = (x_coord + 2) % Params.world_width;
-                    y_coord = (y_coord == 0) ? Params.world_height-2: y_coord-2;          
+                    y_coord = (y_coord == 0) ? Params.world_height-2: (y_coord == 1) ? Params.world_height-1 : y_coord-2;          
                     break;
                 case 2:
-                    y_coord = (y_coord == 0) ? Params.world_height-2: y_coord-2; 
+                    y_coord = (y_coord == 0) ? Params.world_height-1: (y_coord == 1) ? Params.world_height-1 : y_coord-2; 
                     break;
                 case 3:
-                    x_coord = (x_coord == 0) ? Params.world_width-2: x_coord-2;
-                    y_coord = (y_coord == 0) ? Params.world_height-2: y_coord-2; 
+                    x_coord = (x_coord == 0) ? Params.world_width-2: (x_coord == 1) ? Params.world_width-1 : x_coord-2;
+                    y_coord = (y_coord == 0) ? Params.world_height-2: (y_coord == 1) ? Params.world_height-1 : y_coord-2; 
                     break;
                 case 4:
-                    x_coord = (x_coord == 0) ? Params.world_width-2: x_coord-2; 
+                    x_coord = (x_coord == 0) ? Params.world_width-2: (x_coord == 1) ? Params.world_width-1 : x_coord-2; 
                     break;
                 case 5:
-                    x_coord = (x_coord == 0) ? Params.world_width-2: x_coord-2;
+                    x_coord = (x_coord == 0) ? Params.world_width-2:(x_coord == 1) ? Params.world_width-1 : x_coord-2;
                     y_coord = (y_coord + 2) % Params.world_height;
                     break;
                 case 6:
@@ -155,7 +154,7 @@ public abstract class Critter {
             CritterWorld.occupied[y_coord][x_coord]++;
             CritterWorld.critterGrid[y_coord][x_coord] = this.toString();
             
-            System.out.println(this.toString() + " just ran, new coords: " + x_coord + "," + y_coord + ". New Energy: " + energy);
+//            System.out.println(this.toString() + " just ran, new coords: " + x_coord + "," + y_coord + ". New Energy: " + energy);
         }
     }
     
@@ -177,23 +176,56 @@ public abstract class Critter {
                 CritterWorld.critterGrid[y_coord][x_coord] = "";
             }
             dead.add(this);
+ //           System.out.println(this.toString() + " just ran out of energy, it died.");
             return false;
         }     
         return true;
     } 
 
     protected final void reproduce(Critter offspring, int direction) throws InstantiationException, IllegalAccessException {
+            if(this.energy >= Params.min_reproduce_energy){
+                offspring = (Critter) this.getClass().newInstance();
 
-            offspring = (Critter) this.getClass().newInstance();
-            
-            offspring.x_coord = getRandomInt(this.getX_coord() + getRandomInt(2) - 1);
-            offspring.y_coord = getRandomInt(this.getY_coord() + getRandomInt(2) - 1);
-            CritterWorld.occupied[offspring.x_coord][offspring.y_coord]++;
-            CritterWorld.critterGrid[offspring.x_coord][offspring.y_coord] = offspring.toString();
-            offspring.energy = Math.floorDiv(this.energy, 2);
-            this.energy = this.energy - offspring.energy;
-            babies.add(offspring);
-        
+                offspring.x_coord = this.getX_coord();
+                offspring.y_coord = this.getY_coord();
+                switch (direction) {
+                    case 0:
+                        offspring.x_coord = (offspring.x_coord + 1) % Params.world_width;
+                        break;
+                    case 1:
+                        offspring.x_coord = (offspring.x_coord + 1) % Params.world_width;
+                        offspring.y_coord = (offspring.y_coord == 0) ? Params.world_height-1: offspring.y_coord-1;          
+                        break;
+                    case 2:
+                        offspring.y_coord = (offspring.y_coord == 0) ? Params.world_height-1: offspring.y_coord-1; 
+                        break;
+                    case 3:
+                        offspring.x_coord = (offspring.x_coord == 0) ? Params.world_width-1: offspring.x_coord-1;
+                        offspring.y_coord = (offspring.y_coord == 0) ? Params.world_height-1: offspring.y_coord-1; 
+                        break;
+                    case 4:
+                        offspring.x_coord = (offspring.x_coord == 0) ? Params.world_width-1: offspring.x_coord-1; 
+                        break;
+                    case 5:
+                        offspring.x_coord = (offspring.x_coord == 0) ? Params.world_width-1: offspring.x_coord-1;
+                        offspring.y_coord = (offspring.y_coord + 1) % Params.world_height;
+                        break;
+                    case 6:
+                        offspring.y_coord = (offspring.y_coord + 1) % Params.world_height;
+                        break;
+                    case 7:
+                        offspring.x_coord = (offspring.x_coord + 1) % Params.world_width;
+                        offspring.y_coord = (offspring.y_coord + 1) % Params.world_height;
+                        break;
+                }
+
+                CritterWorld.occupied[offspring.y_coord][offspring.x_coord]++;
+                CritterWorld.critterGrid[offspring.y_coord][offspring.x_coord] = offspring.toString();
+                offspring.energy = Math.floorDiv(this.energy, 2);
+                this.energy = this.energy - offspring.energy;
+                babies.add(offspring);
+                CritterWorld.numCritters++;
+            }
     }
 
     public abstract void doTimeStep();
@@ -211,21 +243,22 @@ public abstract class Critter {
      */
     public static void makeCritter(String critter_class_name) throws InvalidCritterException {
         try {
-            Class cl = Class.forName(critter_class_name);
-            Critter c = (Critter) cl.newInstance();
+            Critter c = (Critter) Class.forName(critter_class_name).newInstance();
 
             c.x_coord = getRandomInt(Params.world_width);
             c.y_coord = getRandomInt(Params.world_height);
             CritterWorld.occupied[c.y_coord][c.x_coord]++;
             CritterWorld.critterGrid[c.y_coord][c.x_coord] = c.toString();
-            //CritterWorld.critterGrid[c.x_coord][c.y_coord] = c.toString();
             c.energy = Params.start_energy;
             population.add(c);
-
+            c.prev_x_coord = c.x_coord;
+            c.prev_y_coord = c.y_coord;
+            CritterWorld.numCritters++;
         } 
         catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
             throw new InvalidCritterException(critter_class_name);
         } 
+        
         
     }
 
@@ -243,7 +276,7 @@ public abstract class Critter {
             Critter c_temp = (Critter) cl.newInstance();
 
             for(Critter i : population){
-                if(i.toString().equals(c_temp.toString())){
+                if(c_temp.getClass() == i.getClass()){
                     critters.add(i);
                 }
             }
@@ -280,6 +313,91 @@ public abstract class Critter {
         System.out.println();		
     }
 
+    /**
+     * Clear the world of all critters, dead and alive
+     */
+    public static void clearWorld() {
+        // Complete this method.
+        population.clear();
+    }
+
+    public static void worldTimeStep() {
+        for (Critter c : population) {
+            c.setHasMoved(false);
+        }
+        
+        for (Critter c : population) {
+            c.doTimeStep();
+        }
+
+        //critters list will be updated as fights occur
+        for (Critter c : population) {
+            for (Critter d : population) {
+                if (!c.equals(d)) {
+                    if (sameCoords(c,d)) {
+                        boolean c_dec = c.fight(d.toString());
+                        boolean d_dec = d.fight(c.toString());
+
+                        
+                        if (c.alive() && d.alive() && sameCoords(c,d)) {
+                            if (((c_dec == true) ? getRandomInt(c.energy) : 0) >= ((d_dec == true) ? getRandomInt(d.energy) : 0)) {
+                                c.energy = c.energy + (d.energy / 2);
+                                CritterWorld.occupied[d.getY_coord()][d.getX_coord()]--;
+                                CritterWorld.critterGrid[c.getY_coord()][c.getX_coord()] = c.toString();
+                                dead.add(d);
+                            } else {
+                                d.energy = d.energy + (c.energy / 2);
+                                CritterWorld.occupied[c.getY_coord()][c.getX_coord()]--;
+                                CritterWorld.critterGrid[d.getY_coord()][d.getX_coord()] = d.toString();
+                                dead.add(c);
+                            }                           
+                        }
+                    }
+                }              
+            }
+        }
+        population.addAll(babies);
+        population.removeAll(dead);
+        CritterWorld.numCritters = CritterWorld.numCritters - dead.size();
+        System.out.println("Critters alive: " + CritterWorld.numCritters);
+        System.out.println("Critters dead: " + dead.size());
+        System.out.println("Critters population: " + population.size());
+
+
+        babies.clear();
+        dead.clear();
+    }
+
+    public static void displayWorld() {
+        String cap = "+ ";
+        for(int i = 0; i < Params.world_width; i++){
+            cap += "- ";
+        }
+        cap += "+";
+        System.out.println(cap);
+
+        for(int i = 0; i < Params.world_height; i++){
+            System.out.print("| ");
+            for(int j = 0; j < Params.world_width; j++){
+                String temp = CritterWorld.critterGrid[i][j];
+                if(temp.equals("")){
+                    temp += " ";
+                }
+                System.out.print(temp + " ");
+            }
+            System.out.println("|");
+        }
+        System.out.println(cap);
+    }
+    
+    public static boolean sameCoords(Critter a, Critter b) {
+        if ((a.x_coord == b.x_coord) && (a.y_coord == b.y_coord)) {
+            return true;
+        } else {
+            return false;
+        }               
+    }
+    
     /** the TestCritter class allows some critters to "cheat". If you want to 
      * create tests of your Critter model, you can create subclasses of this class
      * and then use the setter functions contained here. 
@@ -333,83 +451,7 @@ public abstract class Critter {
         
         
     }
-
-    /**
-     * Clear the world of all critters, dead and alive
-     */
-    public static void clearWorld() {
-        // Complete this method.
-        population.clear();
-    }
-
-    public static void worldTimeStep() {
-        // Complete this method.
-        for (Critter c : population) {
-            c.doTimeStep();
-        }
-
-        //critters list will be updated as fights occur
-        for (Critter c : population) {
-            for (Critter d : population) {
-                if (!c.equals(d)) {
-                    if (sameCoords(c,d)) {
-                        c.fight(d.toString());
-                        d.fight(c.toString());
-                        c.alive();
-                        d.alive();
-                        if (!dead.contains(c) && !dead.contains(d) && sameCoords(c,d)) {
-                            if (getRandomInt(c.energy) >= getRandomInt(d.energy)) {
-                                c.energy = c.energy + (d.energy / 2);
-                                CritterWorld.occupied[d.getY_coord()][d.getX_coord()]--;
-                                dead.add(d);
-                            } else {
-                                d.energy = d.energy + (c.energy / 2);
-                                CritterWorld.occupied[c.getY_coord()][c.getX_coord()]--;
-                                dead.add(c);
-                            }                            
-                        }
-                    }
-                }
-                
-            }
-        }
-        population.addAll(babies);
-        population.removeAll(dead);
-        babies.clear();
-        dead.clear();
-
-    }
-
-    public static void displayWorld() {
-        String cap = "+ ";
-        for(int i = 0; i < Params.world_width; i++){
-            cap += "- ";
-        }
-        cap += "+";
-        System.out.println(cap);
-
-        for(int i = 0; i < Params.world_height; i++){
-            System.out.print("| ");
-            for(int j = 0; j < Params.world_width; j++){
-                String temp = CritterWorld.critterGrid[i][j];
-                if(temp.equals("")){
-                    temp += " ";
-                }
-                System.out.print(temp + " ");
-            }
-            System.out.println("|");
-        }
-        System.out.println(cap);
-    }
     
-    public static boolean sameCoords(Critter a, Critter b) {
-        if ((a.x_coord == b.x_coord) && (a.y_coord == b.y_coord)) {
-            return true;
-        } else {
-            return false;
-        }               
-    }   
-
     /**
      * This method getPopulation has to be modified by you if you are not using the population
      * ArrayList that has been provided in the starter code.  In any case, it has to be

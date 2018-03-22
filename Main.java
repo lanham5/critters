@@ -91,7 +91,7 @@ public class Main {
                 Critter.setSeed(seed);
             }
             else if(input.contains("make")){
-                String name = "assignment4." + input.split(" ")[1];
+                String name = myPackage + "." + input.split(" ")[1];
                 int count = 1;
                 if(input.split(" ").length > 2){
                     count = Integer.valueOf(input.split(" ")[2]);
@@ -101,7 +101,7 @@ public class Main {
                 }
             }
             else if(input.contains("stats")){
-                String name = "assignment4." + input.split(" ")[1];
+                String name = myPackage + "." + input.split(" ")[1];
                 Critter.getInstances(name);
                 Critter.runStats(Critter.getInstances(name));
             }else{

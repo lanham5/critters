@@ -5,6 +5,9 @@
  */
 package assignment4;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Michael
@@ -27,7 +30,7 @@ public class Fly extends Critter {
                 } else {
                     walk(direction);
                     
-                    if (CritterWorld.occupied[getX_coord()][getY_coord()] > 1) {
+                    if (CritterWorld.occupied[getY_coord()][getX_coord()] > 1) {
                         undoWalk();
                         return true;
                     }                                         
@@ -40,11 +43,10 @@ public class Fly extends Critter {
 
 	@Override
 	public void doTimeStep() {
-            
-            if (Critter.getRandomInt(9) >= 0) {   
+            if (Critter.getRandomInt(9) >= 5) {   
                 walk(Critter.getRandomInt(7));
                 setHasMoved(true);
-            }
+            } 
             
 	}
 
