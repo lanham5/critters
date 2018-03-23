@@ -134,6 +134,10 @@ public class Main {
                     }         
                     break;
                 case "make":
+                    if(!input3.equals("") && !isInteger(input3)){
+                        processed = false;
+                        break;
+                    }
                     if(length == 3 || length == 2){
                         String name = input.split(" ")[1];
                         int count = 1;
