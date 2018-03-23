@@ -14,6 +14,7 @@ public class Algae extends TestCritter {
         }
 	
 	public void doTimeStep() {
+            CritterWorld.critterGrid[this.getY_coord()][this.getX_coord()] = this.toString();
             setEnergy(getEnergy() + Params.photosynthesis_energy_amount);
 	}
 }

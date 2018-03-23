@@ -347,14 +347,19 @@ public abstract class Critter {
     }
 
     public static void worldTimeStep() throws InvalidCritterException {
+
         for (Critter c : population) {
             c.setHasMoved(false);
         }
-        
+        if(checkForLeakage()){
+            System.out.println("");
+        }
         for (Critter c : population) {
             c.doTimeStep();
         }
-
+        if(checkForLeakage()){
+            System.out.println("");
+        }
         //critters list will be updated as fights occur
         for (Critter c : population) {
             for (Critter d : population) {
@@ -383,12 +388,20 @@ public abstract class Critter {
         System.out.println("Num Critters: " + CritterWorld.numCritters);
         System.out.println("Critters dead: " + dead.size());
         System.out.println("Critters population: " + population.size());
+        int occupiedCount = 0;
+        for(int i = 0; i < Params.world_height; i++){
+            for(int j = 0; j < Params.world_width; j++){
+             
+                occupiedCount += CritterWorld.occupied[i][j];
+            }
+        }
+        System.out.println(occupiedCount);
         babies.clear();
         dead.clear();
         
-//        for(int i = 0; i < Params.refresh_algae_count; i++){
-//            makeCritter("Algae");
-//        }
+        for(int i = 0; i < Params.refresh_algae_count; i++){
+            makeCritter("Algae");
+        }
     }
 
     public static void displayWorld() {
@@ -516,5 +529,15 @@ public abstract class Critter {
         return hasMoved;
     }
     
+    public static boolean checkForLeakage(){
+        for(int i = 0; i < Params.world_height; i++){
+            for(int j = 0; j < Params.world_width; j++){
+                if((!CritterWorld.critterGrid[i][j].equals("") && CritterWorld.occupied[i][j] == 0) || (CritterWorld.critterGrid[i][j].equals("") && CritterWorld.occupied[i][j] != 0)){
+                    return true;
+                }
+            } 
+        }
+        return false;
+    }
     
 }

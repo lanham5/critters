@@ -30,7 +30,7 @@ public class CritterWorld {
                 Critter.makeCritter("Algae");
 
             }
-            for(int i = 0; i < 90; i++){
+            for(int i = 0; i < 25; i++){
                 Critter.makeCritter("Craig");
 
             }
