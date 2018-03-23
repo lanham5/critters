@@ -5,6 +5,9 @@
  */
 package assignment4;
 
+//Snakes will not fight other snakes or bother with plants. When unencumbered,
+//it walks around and stays in place.
+
 /**
  *
  * @author Michael

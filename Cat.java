@@ -5,6 +5,8 @@
  */
 package assignment4;
 
+//Cats are fearless critters. They will fight any other critter on the map.
+//It will walk around some of the time, choosing its direction randomly.
 
 /**
  *
@@ -22,9 +24,7 @@ public class Cat extends Critter {
         if (Critter.getRandomInt(10) >= 5) {   
             walk(Critter.getRandomInt(7));
             setHasMoved(true);
-        } else {
-            
-        }
+        } 
     }
     
 }

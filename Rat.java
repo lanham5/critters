@@ -5,6 +5,11 @@
  */
 package assignment4;
 
+//A rat is a critter that generally avoids conflict. It will walk 
+//around but runs if threatened by a cat or a snake. Otherwise, it 
+//will fight.
+
+
 /**
  *
  * @author Michael
