@@ -443,11 +443,23 @@ public abstract class Critter {
         }
 
         protected void setX_coord(int new_x_coord) {
+            CritterWorld.occupied[this.getY_coord()][this.getX_coord()]--;
+            if(CritterWorld.occupied[this.getY_coord()][this.getX_coord()] == 0){
+                CritterWorld.critterGrid[this.getY_coord()][this.getX_coord()] = "";
+            }
             super.x_coord = new_x_coord;
+            CritterWorld.occupied[this.getY_coord()][this.getX_coord()]++;
+            CritterWorld.critterGrid[this.getY_coord()][this.getX_coord()] = this.toString();
         }
 
         protected void setY_coord(int new_y_coord) {
-            super.y_coord = new_y_coord;
+            CritterWorld.occupied[this.getY_coord()][this.getX_coord()]--;
+            if(CritterWorld.occupied[this.getY_coord()][this.getX_coord()] == 0){
+                CritterWorld.critterGrid[this.getY_coord()][this.getX_coord()] = "";
+            }
+            super.x_coord = new_y_coord;
+            CritterWorld.occupied[this.getY_coord()][this.getX_coord()]++;
+            CritterWorld.critterGrid[this.getY_coord()][this.getX_coord()] = this.toString();
         }
 
         protected int getX_coord() {
@@ -504,10 +516,22 @@ public abstract class Critter {
         energy = new_energy_value;
     }
     protected void setX_coord(int new_x_coord) {
+        CritterWorld.occupied[this.getY_coord()][this.getX_coord()]--;
+        if(CritterWorld.occupied[this.getY_coord()][this.getX_coord()] == 0){
+            CritterWorld.critterGrid[this.getY_coord()][this.getX_coord()] = "";
+        }
         x_coord = new_x_coord;
+        CritterWorld.occupied[this.getY_coord()][this.getX_coord()]++;
+        CritterWorld.critterGrid[this.getY_coord()][this.getX_coord()] = this.toString();
     }
     protected void setY_coord(int new_y_coord) {
-        y_coord = new_y_coord;
+        CritterWorld.occupied[this.getY_coord()][this.getX_coord()]--;
+        if(CritterWorld.occupied[this.getY_coord()][this.getX_coord()] == 0){
+            CritterWorld.critterGrid[this.getY_coord()][this.getX_coord()] = "";
+        }
+        x_coord = new_y_coord;
+        CritterWorld.occupied[this.getY_coord()][this.getX_coord()]++;
+        CritterWorld.critterGrid[this.getY_coord()][this.getX_coord()] = this.toString();
     }
     protected int getX_coord() {
         return x_coord;

@@ -5,7 +5,7 @@
  */
 package assignment4;
 
-//A rat is a critter that generally avoids conflict. It will walk 
+//A 2 is a critter that generally avoids conflict. It will walk 
 //around but runs if threatened by a cat or a snake. Otherwise, it 
 //will fight.
 
@@ -14,9 +14,9 @@ package assignment4;
  *
  * @author Michael
  */
-public class Rat extends Critter {
+public class Critter2 extends Critter {
     @Override
-    public String toString() { return "R"; }
+    public String toString() { return "2"; }
 
     public boolean fight(String enemy) { 
         int direction = Critter.getRandomInt(7);

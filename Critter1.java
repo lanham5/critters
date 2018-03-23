@@ -10,7 +10,7 @@ package assignment4;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-//A fly is a simple critter. It will not engage in any fights unless
+//A 1 is a simple critter. It will not engage in any fights unless
 //it encounters algae. It will walk away from a fight otherwise. When
 //unprovoked, it will walk around the map some of the time and stay 
 //in place other times.
@@ -20,10 +20,10 @@ import java.util.logging.Logger;
  *
  * @author Michael
  */
-public class Fly extends Critter {
+public class Critter1 extends Critter {
 	
 	@Override
-	public String toString() { return "*"; }
+	public String toString() { return "1"; }
 			
 	public boolean fight(String enemy) { 
             int direction = Critter.getRandomInt(7);

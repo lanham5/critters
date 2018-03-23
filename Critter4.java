@@ -5,16 +5,16 @@
  */
 package assignment4;
 
-//Snakes will not fight other snakes or bother with plants. When unencumbered,
+//4's will not fight other snakes or bother with plants. When unencumbered,
 //it walks around and stays in place.
 
 /**
  *
  * @author Michael
  */
-public class Snake extends Critter{
+public class Critter4 extends Critter{
     @Override
-    public String toString() { return "S"; }
+    public String toString() { return "4"; }
 	
     public boolean fight(String other) { 
         if(other.equals("@")){

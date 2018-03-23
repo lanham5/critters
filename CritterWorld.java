@@ -24,12 +24,12 @@ public class CritterWorld {
     public static void initialize(){
         numCritters = 0;
         empty();
-        
-        try{
-            for(int i = 0; i < 100; i++){
-                Critter.makeCritter("Algae");
 
-            }
+//        try{
+//            for(int i = 0; i < 100; i++){
+//                Critter.makeCritter("Algae");
+//
+//            }
 //            for(int i = 0; i < 25; i++){
 //                Critter.makeCritter("Craig");
 //
@@ -50,9 +50,9 @@ public class CritterWorld {
 //                Critter.makeCritter("Rat");
 //
 //            }
-        } catch (InvalidCritterException ex) {
-            System.out.println("Error in Initialization of Critter World");;
-        }
+//        } catch (InvalidCritterException ex) {
+//            System.out.println("Error in Initialization of Critter World");;
+//        }
 
     }
     

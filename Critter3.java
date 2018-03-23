@@ -5,16 +5,16 @@
  */
 package assignment4;
 
-//Cats are fearless critters. They will fight any other critter on the map.
+//3's are fearless critters. They will fight any other critter on the map.
 //It will walk around some of the time, choosing its direction randomly.
 
 /**
  *
  * @author Michael
  */
-public class Cat extends Critter {
+public class Critter3 extends Critter {
     @Override
-    public String toString() { return "C"; }
+    public String toString() { return "3"; }
 	
     
     public boolean fight(String not_used) { return true; }
