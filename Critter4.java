@@ -5,7 +5,7 @@
  */
 package assignment4;
 
-//4's will not fight other snakes or bother with plants. When unencumbered,
+//4's will not fight other 4's or bother with plants. When unencumbered,
 //it walks around and stays in place.
 
 /**
@@ -15,7 +15,11 @@ package assignment4;
 public class Critter4 extends Critter{
     @Override
     public String toString() { return "4"; }
-	
+    /**
+     * 4's fight method, 4 chooses to avoid algae but fights everything else
+     * @param other
+     * @return 
+     */
     public boolean fight(String other) { 
         if(other.equals("@")){
             return false;
@@ -27,6 +31,9 @@ public class Critter4 extends Critter{
     }
 
     @Override
+    /**
+     * 4's time step, 4 chooses to stay in place if something has moved on top of it.
+     */
     public void doTimeStep() {
         int direction = Critter.getRandomInt(7);
         if(CritterWorld.occupied[this.getY_coord()][this.getX_coord()] > 1){

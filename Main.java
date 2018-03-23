@@ -183,7 +183,11 @@ public class Main {
         System.out.flush();
 
     }
-    
+    /**
+     * returns true if passed string is an integer, false otherwise.
+     * @param str
+     * @return 
+     */
     public static boolean isInteger(String str) {
         if (str == null) {
             return false;

@@ -20,7 +20,9 @@ public class CritterWorld {
     static {
         myPackage = Critter.class.getPackage().toString().split(" ")[1];
     }
-    
+    /**
+     * initializes the critter world, mainly used for testing purposes, but initializes grid helper variables as well.
+     */
     public static void initialize(){
         numCritters = 0;
         empty();
@@ -55,8 +57,12 @@ public class CritterWorld {
 //        }
 
     }
-    
+    /**
+     * clears the grid helper variables, critterGrid and occupied
+     */
+     
     public static void empty(){
+        numCritters = 0;
         for (String[] row : critterGrid) {
             Arrays.fill(row, "");
         }

@@ -27,11 +27,17 @@ public class Craig extends Critter {
 		}
 		dir = Critter.getRandomInt(8);
 	}
-	
+	/**
+         * craigs will always fight
+         * @param not_used
+         * @return 
+         */
 	public boolean fight(String not_used) { 
             return true; 
         }
-
+        /**
+         * craigs will move and reproduce if they have enough energy.
+         */
 	@Override
 	public void doTimeStep() {
 		/* take one step forward */

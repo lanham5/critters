@@ -24,7 +24,11 @@ public class Critter1 extends Critter {
 	
 	@Override
 	public String toString() { return "1"; }
-			
+	/**
+         * 1's fight method, 1 attempts to run from anything but algae
+         * @param enemy
+         * @return 
+         */		
 	public boolean fight(String enemy) { 
             int direction = Critter.getRandomInt(7);
  
