@@ -21,39 +21,48 @@ public class CritterWorld {
         myPackage = Critter.class.getPackage().toString().split(" ")[1];
     }
     
-    public static void initialize() throws InvalidCritterException{
+    public static void initialize(){
         numCritters = 0;
+        empty();
+        
+        try{
+            for(int i = 0; i < 100; i++){
+                Critter.makeCritter("Algae");
+
+            }
+            for(int i = 0; i < 90; i++){
+                Critter.makeCritter("Craig");
+
+            }
+            for(int i = 0; i < 25; i++){
+                Critter.makeCritter("Fly");
+
+            }
+            for(int i = 0; i < 25; i++){
+                Critter.makeCritter("Snake");
+
+            }
+            for(int i = 0; i < 25; i++){
+                Critter.makeCritter("Cat");
+
+            }
+            for(int i = 0; i < 25; i++){
+                Critter.makeCritter("Rat");
+
+            }
+        } catch (InvalidCritterException ex) {
+            System.out.println("Error in Initialization of Critter World");;
+        }
+
+    }
+    
+    public static void empty(){
         for (String[] row : critterGrid) {
             Arrays.fill(row, "");
         }
         for (int[] row : occupied) {
             Arrays.fill(row, 0);
         }
-        
-        for(int i = 0; i < 100; i++){
-            Critter.makeCritter(myPackage + ".Algae");
-            
-        }
-        for(int i = 0; i < 25; i++){
-            Critter.makeCritter(myPackage + ".Craig");
-            
-        }
-        for(int i = 0; i < 25; i++){
-            Critter.makeCritter(myPackage + ".Fly");
-            
-        }
-        for(int i = 0; i < 25; i++){
-            Critter.makeCritter(myPackage + ".Snake");
-            
-        }
-        for(int i = 0; i < 25; i++){
-            Critter.makeCritter(myPackage + ".Cat");
-            
-        }
-        for(int i = 0; i < 25; i++){
-            Critter.makeCritter(myPackage + ".Rat");
-            
-        }
-
     }
+    
 }

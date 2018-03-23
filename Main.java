@@ -14,6 +14,10 @@ package assignment4;
 
 import java.util.Scanner;
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /*
@@ -27,9 +31,8 @@ public class Main {
     private static String inputFile;	// input file, used instead of keyboard input if specified
     static ByteArrayOutputStream testOutputString;	// if test specified, holds all console output
     private static String myPackage;	// package of Critter file.  Critter cannot be in default pkg.
-    private static boolean DEBUG = false; // Use it or not, as you wish!
     static PrintStream old = System.out;	// if you want to restore output to console
-
+    private static boolean processed = true;
 
     // Gets the package name.  The usage assumes that Critter and its subclasses are all in the same package.
     static {
@@ -41,7 +44,7 @@ public class Main {
      * @param args args can be empty.  If not empty, provide two parameters -- the first is a file name, 
      * and the second is test (for test output, where all output to be directed to a String), or nothing.
      */
-    public static void main(String[] args) throws InvalidCritterException { 
+    public static void main(String[] args){ 
         if (args.length != 0) {
             try {
                 inputFile = args[0];
@@ -68,51 +71,146 @@ public class Main {
         }
             
         /* Do not alter the code above for your submission. */
-        /* Write your code below. */
+
         CritterWorld.initialize();       
         kb.useDelimiter("\n");
         String input = kb.next();
+        String input1;
+        String input2;
+        String input3;
+        int length;
         
         while(!input.equals("quit")){
-            if(input.equals("show")){
-                Critter.displayWorld();
+            length = 1;
+            input1 = input;
+            input2 = "";
+            input3 = "";
+            if(input1.contains(" ")){
+                length = input.split(" ").length;
             }
-            else if(input.contains("step")){
-                int count = 1;
-                if(input.split(" ").length > 1){
-                    count = Integer.valueOf(input.split(" ")[1]);
-                }             
-                for(int i = 0; i < count; i++){
-                    Critter.worldTimeStep();
-                }
+            if(length > 3){
+                 processed = false;
             }
-            else if(input.contains("seed")){
-                int seed = Integer.valueOf(input.split(" ")[1]);
-                Critter.setSeed(seed);
+            else if(length == 2){
+                input1 = input.split(" ")[0];
+                input2 = input.split(" ")[1];
             }
-            else if(input.contains("make")){
-                String name = myPackage + "." + input.split(" ")[1];
-                int count = 1;
-                if(input.split(" ").length > 2){
-                    count = Integer.valueOf(input.split(" ")[2]);
-                }
-                for(int i = 0; i < count; i++){
-                    Critter.makeCritter(name);
-                }
+            else if(length == 3){
+                input1 = input.split(" ")[0];
+                input2 = input.split(" ")[1];
+                input3 = input.split(" ")[2]; 
             }
-            else if(input.contains("stats")){
-                String name = myPackage + "." + input.split(" ")[1];
-                Critter.getInstances(name);
-                Critter.runStats(Critter.getInstances(name));
-            }else{
-                System.out.println("Invalid input");
+            switch(input1){
+                case "show":
+                    if(length == 1){
+                        Critter.displayWorld();
+                    } else {
+                        processed = false;
+                    }                
+                    break;
+                case "step":
+                    if(length <= 2){
+                        int count = 1;
+                        if(isInteger(input2)){
+                            count = Integer.valueOf(input2);
+                        } else if (length == 2){
+                            processed = false;
+                            break;
+                        }
+                        for(int i = 0; i < count; i++){
+                            try {
+                                Critter.worldTimeStep();
+                            } catch (InvalidCritterException ex) {
+                                 processed = false;
+                            }
+                        }
+                    } else {
+                        processed = false;
+                        break;
+                    }
+                        
+                    break;
+                case "seed":
+                    if(length == 2 && isInteger(input2)){
+                        int seed = Integer.valueOf(input2);
+                        Critter.setSeed(seed);
+                    } else {
+                        processed = false;
+                    }         
+                    break;
+                case "make":
+                    if(length == 3 || length == 2){
+                        String name = input.split(" ")[1];
+                        int count = 1;
+                        if(isInteger(input3)){
+                            count = Integer.valueOf(input3);
+                        }
+                        for(int i = 0; i < count; i++){
+                            try {
+                                Critter.makeCritter(name);
+                            } catch (InvalidCritterException ex) {
+                                 processed = false;
+                            }
+                        }
+                    } else{
+                        processed = false;
+                    }                
+                    break;
+                case "stats":
+                    if(length == 2){
+                        try {
+                            List<Critter> instances = Critter.getInstances(input2);
+
+                            Class<?> c = Class.forName(Critter.class.getPackage().toString().split(" ")[1] + "." + input2);
+                            c.getMethod("runStats", List.class).invoke(null, instances);
+                        } catch (InvalidCritterException | ClassNotFoundException | NoSuchMethodException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                             processed = false;
+                        }
+                    } else {
+                        processed = false;
+                    }
+                    
+                    break;
+
+                default:
+                    processed = false;
+                    break;
             }
             
+            if(!processed){
+                System.out.println("Error Processing: " + input);
+            }
+            processed = true;
             input = kb.next();
-        }
-
+            
+                
+        }        
         /* Write your code above */
         System.out.flush();
 
+    }
+    
+    public static boolean isInteger(String str) {
+        if (str == null) {
+            return false;
+        }
+        int length = str.length();
+        if (length == 0) {
+            return false;
+        }
+        int i = 0;
+        if (str.charAt(0) == '-') {
+            if (length == 1) {
+                return false;
+            }
+            i = 1;
+        }
+        for (; i < length; i++) {
+            char c = str.charAt(i);
+            if (c < '0' || c > '9') {
+                return false;
+            }
+        }
+        return true;
     }
 }

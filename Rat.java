@@ -19,31 +19,21 @@ public class Rat extends Critter {
             
         if (getHasMoved() == false) {
             if (enemy.equals("C") || enemy.equals("S")) {
-                CritterWorld.occupied[getY_coord()][getX_coord()]--;
                 run(direction);
 
                 if (CritterWorld.occupied[getY_coord()][getX_coord()] > 0) {
                     undoRun(direction);
-                    CritterWorld.occupied[getY_coord()][getX_coord()]++;
                     return true;
-                } else {
-                    CritterWorld.occupied[getY_coord()][getX_coord()]++; //new coordinates
-                }
+                } 
                 return false;  
-            } else {
-                return true;
-            }
-        } else {
-            return true;
+            } 
         }
-        
+        return true;
     }
 
     @Override
     public void doTimeStep() {
-        CritterWorld.occupied[getY_coord()][getX_coord()]--;
         walk(Critter.getRandomInt(7));
-        CritterWorld.occupied[getY_coord()][getX_coord()]++;
         
         setHasMoved(true);
     }

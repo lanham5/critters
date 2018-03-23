@@ -23,14 +23,14 @@ public class Fly extends Critter {
 	
 	public boolean fight(String enemy) { 
             int direction = Critter.getRandomInt(7);
-            
+ 
             if (getHasMoved() == false) {
                 if (enemy.equals("@")) {
                     return true; 
                 } else {
                     walk(direction);
                     
-                    if (CritterWorld.occupied[getY_coord()][getX_coord()] > 1) {
+                    if (CritterWorld.occupied[getY_coord()][getX_coord()] > 0) {
                         undoWalk();
                         return true;
                     }                                         

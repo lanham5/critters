@@ -45,11 +45,8 @@ public class Craig extends Critter {
 			child.genes[g] -= 1;
 			g = Critter.getRandomInt(8);
 			child.genes[g] += 1;
-                    try {
                         reproduce(child, Critter.getRandomInt(8));
-                    } catch (InstantiationException | IllegalAccessException ex) {
-                        Logger.getLogger(Craig.class.getName()).log(Level.SEVERE, null, ex);
-                    } 
+                    
                     
 		}
 		
