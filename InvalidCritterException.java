@@ -1,5 +1,9 @@
 package assignment4;
-
+/*
+ * Critters Assignment
+ * Jared Ucherek, JMU329
+ * Michael Lanham, ML42972
+ */
 
 public class InvalidCritterException extends Exception {
 	String offending_class;

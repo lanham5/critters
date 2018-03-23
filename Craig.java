@@ -1,5 +1,9 @@
 package assignment4;
-
+/*
+ * Critters Assignment
+ * Jared Ucherek, JMU329
+ * Michael Lanham, ML42972
+ */
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

@@ -1,16 +1,10 @@
 package assignment4;
 /* CRITTERS Main.java
- * EE422C Project 4 submission by
- * Replace <...> with your actual data.
- * <Student1 Name>
- * <Student1 EID>
- * <Student1 5-digit Unique No.>
- * <Student2 Name>
- * <Student2 EID>
- * <Student2 5-digit Unique No.>
- * Slip days used: <0>
- * Fall 2016
+ * Critters Assignment
+ * Jared Ucherek, JMU329
+ * Michael Lanham, ML42972
  */
+ 
 
 import java.util.Scanner;
 import java.io.*;
@@ -81,6 +75,7 @@ public class Main {
         int length;
         
         while(!input.equals("quit")){
+            
             length = 1;
             input1 = input;
             input2 = "";
@@ -160,7 +155,6 @@ public class Main {
                     if(length == 2){
                         try {
                             List<Critter> instances = Critter.getInstances(input2);
-
                             Class<?> c = Class.forName(Critter.class.getPackage().toString().split(" ")[1] + "." + input2);
                             c.getMethod("runStats", List.class).invoke(null, instances);
                         } catch (InvalidCritterException | ClassNotFoundException | NoSuchMethodException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {

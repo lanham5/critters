@@ -1,7 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Critters Assignment
+ * Jared Ucherek, JMU329
+ * Michael Lanham, ML42972
  */
 package assignment4;
 
@@ -30,26 +30,26 @@ public class CritterWorld {
                 Critter.makeCritter("Algae");
 
             }
-            for(int i = 0; i < 25; i++){
-                Critter.makeCritter("Craig");
-
-            }
-            for(int i = 0; i < 25; i++){
-                Critter.makeCritter("Fly");
-
-            }
-            for(int i = 0; i < 25; i++){
-                Critter.makeCritter("Snake");
-
-            }
-            for(int i = 0; i < 25; i++){
-                Critter.makeCritter("Cat");
-
-            }
-            for(int i = 0; i < 25; i++){
-                Critter.makeCritter("Rat");
-
-            }
+//            for(int i = 0; i < 25; i++){
+//                Critter.makeCritter("Craig");
+//
+//            }
+//            for(int i = 0; i < 25; i++){
+//                Critter.makeCritter("Fly");
+//
+//            }
+//            for(int i = 0; i < 25; i++){
+//                Critter.makeCritter("Snake");
+//
+//            }
+//            for(int i = 0; i < 25; i++){
+//                Critter.makeCritter("Cat");
+//
+//            }
+//            for(int i = 0; i < 25; i++){
+//                Critter.makeCritter("Rat");
+//
+//            }
         } catch (InvalidCritterException ex) {
             System.out.println("Error in Initialization of Critter World");;
         }

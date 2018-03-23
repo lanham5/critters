@@ -1,7 +1,8 @@
 package assignment4;
-
 /*
- * Do not change or submit this file.
+ * Critters Assignment
+ * Jared Ucherek, JMU329
+ * Michael Lanham, ML42972
  */
 import assignment4.Critter.TestCritter;
 
